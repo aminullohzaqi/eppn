@@ -9,8 +9,8 @@ const apiService = new ApiService()
 const producerService = ProducerService
 
 async function runProcess (hostname, dataDb, dataApi) {
-    const database = dataDb.filter(obj => obj.hostname === hostname)
-    const api = dataApi.computers.filter(obj => obj.hostName === hostname)
+    const database = dataDb.filter(obj => obj.displayname === hostname)
+    const api = dataApi.computers.filter(obj => obj.displayname === hostname)
     const apiFilter = api.map((data) => {
         return {
             hostname: data.hostName,
@@ -48,7 +48,7 @@ async function init () {
         const dataApi = await apiService.getData()
 
         for (let i = 0; i < (dataDb.length); i++) {
-            runProcess(dataDb[i].hostname, dataDb, dataApi)
+            runProcess(dataDb[i].displayname, dataDb, dataApi)
         }
         console.log('Running Success')
     } catch (error) {

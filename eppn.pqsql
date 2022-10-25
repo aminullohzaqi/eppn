@@ -24,7 +24,7 @@ SET default_table_access_method = heap;
 -- Name: admin; Type: TABLE; Schema: public; Owner: amin
 --
 
-CREATE TABLE admin (
+CREATE TABLE public.admin (
     admin_id integer NOT NULL,
     adminname character varying(100) NOT NULL,
     email character varying(100) NOT NULL,
@@ -32,13 +32,13 @@ CREATE TABLE admin (
 );
 
 
-ALTER TABLE admin OWNER TO amin;
+ALTER TABLE public.admin OWNER TO amin;
 
 --
 -- Name: log; Type: TABLE; Schema: public; Owner: amin
 --
 
-CREATE TABLE log (
+CREATE TABLE public.log (
     log_id character varying(50) NOT NULL,
     servername character varying(50) NOT NULL,
     agentstatus character varying(50) NOT NULL,
@@ -47,14 +47,48 @@ CREATE TABLE log (
 );
 
 
-ALTER TABLE log OWNER TO amin;
+ALTER TABLE public.log OWNER TO amin;
+
+--
+-- Name: pgmigrations; Type: TABLE; Schema: public; Owner: amin
+--
+
+CREATE TABLE public.pgmigrations (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    run_on timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.pgmigrations OWNER TO amin;
+
+--
+-- Name: pgmigrations_id_seq; Type: SEQUENCE; Schema: public; Owner: amin
+--
+
+CREATE SEQUENCE public.pgmigrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pgmigrations_id_seq OWNER TO amin;
+
+--
+-- Name: pgmigrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: amin
+--
+
+ALTER SEQUENCE public.pgmigrations_id_seq OWNED BY public.pgmigrations.id;
 
 
 --
 -- Name: server; Type: TABLE; Schema: public; Owner: amin
 --
 
-CREATE TABLE server (
+CREATE TABLE public.server (
     server_id character varying(50) NOT NULL,
     hostname character varying(50) NOT NULL,
     displayname character varying(100) NOT NULL,
@@ -66,25 +100,32 @@ CREATE TABLE server (
 );
 
 
-ALTER TABLE server OWNER TO amin;
+ALTER TABLE public.server OWNER TO amin;
 
 --
 -- Name: servergroup; Type: TABLE; Schema: public; Owner: amin
 --
 
-CREATE TABLE servergroup (
+CREATE TABLE public.servergroup (
     group_id integer NOT NULL,
     groupname character varying(100) NOT NULL
 );
 
 
-ALTER TABLE servergroup OWNER TO amin;
+ALTER TABLE public.servergroup OWNER TO amin;
+
+--
+-- Name: pgmigrations id; Type: DEFAULT; Schema: public; Owner: amin
+--
+
+ALTER TABLE ONLY public.pgmigrations ALTER COLUMN id SET DEFAULT nextval('public.pgmigrations_id_seq'::regclass);
+
 
 --
 -- Data for Name: admin; Type: TABLE DATA; Schema: public; Owner: amin
 --
 
-COPY admin (admin_id, adminname, email, whatsapp) FROM stdin;
+COPY public.admin (admin_id, adminname, email, whatsapp) FROM stdin;
 0	Aminulloh Zaqi	aminulloh.zaqi@gmail.com	+6281584679688
 60	Khairani Khalida	khairanikhalida2022@gmail.com	012345678910
 \.
@@ -94,7 +135,7 @@ COPY admin (admin_id, adminname, email, whatsapp) FROM stdin;
 -- Data for Name: log; Type: TABLE DATA; Schema: public; Owner: amin
 --
 
-COPY log (log_id, servername, agentstatus, agentmessage, "timestamp") FROM stdin;
+COPY public.log (log_id, servername, agentstatus, agentmessage, "timestamp") FROM stdin;
 log-2022-10-03T04:13:03.336Z	BDU-192.168.15.110	warning	File cannot be analyzed or quarantined (maximum disk space used to store identified files exceeded)	2022-10-03T04:13:03.336Z
 log-2022-10-03T04:13:03.331Z	LDM-172.19.2.152	active	Managed (Offline)	2022-10-03T04:13:03.331Z
 log-2022-10-03T04:15:33.154Z	BDU-192.168.15.110	warning	File cannot be analyzed or quarantined (maximum disk space used to store identified files exceeded)	2022-10-03T04:15:33.154Z
@@ -122,10 +163,28 @@ log-2022-10-24T06:07:45.122Z	LDM-172.19.2.152	active	Managed (Online)	2022-10-24
 
 
 --
+-- Data for Name: pgmigrations; Type: TABLE DATA; Schema: public; Owner: amin
+--
+
+COPY public.pgmigrations (id, name, run_on) FROM stdin;
+1	1658111839875_create-table-server-	2022-07-18 09:52:07.70988
+2	1658112875424_create-table-admin	2022-07-18 09:58:41.198372
+3	1658113180586_create-table-log	2022-07-18 10:04:23.239538
+4	1658113770423_add-foreign-key-to-admin-column	2022-07-18 10:13:07.716889
+5	1658114097713_add-foreign-key-to-servername-column	2022-07-18 10:25:18.551579
+6	1658116455506_change-column-server.group-name	2022-07-18 10:58:57.624332
+7	1658117162501_change-column-log.agentmessage-type	2022-07-18 11:15:50.326212
+8	1658730840625_create-table-group	2022-07-25 13:36:29.951128
+9	1658731289381_change-table-group-name	2022-07-25 13:44:36.71911
+10	1658731862714_add-foreign-key-to-servergroup-column	2022-07-25 13:53:10.12207
+\.
+
+
+--
 -- Data for Name: server; Type: TABLE DATA; Schema: public; Owner: amin
 --
 
-COPY server (server_id, hostname, displayname, servergroup, agentstatus, agentmessage, admin, statusupdate) FROM stdin;
+COPY public.server (server_id, hostname, displayname, servergroup, agentstatus, agentmessage, admin, statusupdate) FROM stdin;
 LDM-172.19.1.132	172.19.1.132	BMKG SOFT Build Master Server	3	active	Managed (Online)	0	2022-07-22T03:37:05.391Z
 BDM-172.19.2.120	172.19.2.120	Server ftp AWS Center	4	active	Managed (Online)	0	2022-07-19:11.00
 BDM-172.19.2.215	172.19.2.215	Server AWS Center Processing & Database	4	active	Managed (Online)	0	2022-07-19:11.00
@@ -181,7 +240,7 @@ TM-192.168.15.152	192.168.15.152	relay-epp01	7	warning	Software Update: Web Repu
 -- Data for Name: servergroup; Type: TABLE DATA; Schema: public; Owner: amin
 --
 
-COPY servergroup (group_id, groupname) FROM stdin;
+COPY public.servergroup (group_id, groupname) FROM stdin;
 3	Pemeliharaan Database MKG
 4	Pengembangan Database MKG
 10	Pengembangan Database Umum
@@ -194,10 +253,17 @@ COPY servergroup (group_id, groupname) FROM stdin;
 
 
 --
+-- Name: pgmigrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: amin
+--
+
+SELECT pg_catalog.setval('public.pgmigrations_id_seq', 10, true);
+
+
+--
 -- Name: admin admin_pkey; Type: CONSTRAINT; Schema: public; Owner: amin
 --
 
-ALTER TABLE ONLY admin
+ALTER TABLE ONLY public.admin
     ADD CONSTRAINT admin_pkey PRIMARY KEY (admin_id);
 
 
@@ -205,7 +271,7 @@ ALTER TABLE ONLY admin
 -- Name: servergroup group_pkey; Type: CONSTRAINT; Schema: public; Owner: amin
 --
 
-ALTER TABLE ONLY servergroup
+ALTER TABLE ONLY public.servergroup
     ADD CONSTRAINT group_pkey PRIMARY KEY (group_id);
 
 
@@ -213,14 +279,23 @@ ALTER TABLE ONLY servergroup
 -- Name: log log_pkey; Type: CONSTRAINT; Schema: public; Owner: amin
 --
 
-ALTER TABLE ONLY log
+ALTER TABLE ONLY public.log
     ADD CONSTRAINT log_pkey PRIMARY KEY (log_id);
+
+
+--
+-- Name: pgmigrations pgmigrations_pkey; Type: CONSTRAINT; Schema: public; Owner: amin
+--
+
+ALTER TABLE ONLY public.pgmigrations
+    ADD CONSTRAINT pgmigrations_pkey PRIMARY KEY (id);
+
 
 --
 -- Name: server server_pkey; Type: CONSTRAINT; Schema: public; Owner: amin
 --
 
-ALTER TABLE ONLY server
+ALTER TABLE ONLY public.server
     ADD CONSTRAINT server_pkey PRIMARY KEY (server_id);
 
 
@@ -228,7 +303,7 @@ ALTER TABLE ONLY server
 -- Name: log fk_log.servername_server.server_id; Type: FK CONSTRAINT; Schema: public; Owner: amin
 --
 
-ALTER TABLE ONLY log
+ALTER TABLE ONLY public.log
     ADD CONSTRAINT "fk_log.servername_server.server_id" FOREIGN KEY (servername) REFERENCES public.server(server_id) ON DELETE CASCADE;
 
 
@@ -236,7 +311,7 @@ ALTER TABLE ONLY log
 -- Name: server fk_server.admin_admin.admin_id; Type: FK CONSTRAINT; Schema: public; Owner: amin
 --
 
-ALTER TABLE ONLY server
+ALTER TABLE ONLY public.server
     ADD CONSTRAINT "fk_server.admin_admin.admin_id" FOREIGN KEY (admin) REFERENCES public.admin(admin_id) ON DELETE CASCADE;
 
 
@@ -244,7 +319,7 @@ ALTER TABLE ONLY server
 -- Name: server fk_server.servergroup_servergroup.group_id; Type: FK CONSTRAINT; Schema: public; Owner: amin
 --
 
-ALTER TABLE ONLY server
+ALTER TABLE ONLY public.server
     ADD CONSTRAINT "fk_server.servergroup_servergroup.group_id" FOREIGN KEY (servergroup) REFERENCES public.servergroup(group_id) ON DELETE CASCADE;
 
 

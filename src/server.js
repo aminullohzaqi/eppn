@@ -23,7 +23,7 @@ async function runProcess (hostname, dataDb, dataApi) {
         })
         const stringMessage = apiFilter[0].agentmessage.toString()
 
-        if (database[0].agentstatus !== apiFilter[0].agentstatus || database[0].agentmessage !== stringMessage) {
+        if (database[0].agentstatus !== apiFilter[0].agentstatus) {
             const statusupdate = new Date().toISOString()
             const lastcommunication = new Date(apiFilter[0].lastcommunication).toLocaleString()
 

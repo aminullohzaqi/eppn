@@ -32,7 +32,7 @@ class DatabaseService {
     }
 
     async insertLog (serverId, agentstatus, agentmessage, statusupdate) {
-        const id = `log-${statusupdate}`
+        const id = `log-${serverId}-${statusupdate}`
 
         const query = {
             text: 'INSERT INTO log VALUES ($1, $2, $3, $4, $5)',

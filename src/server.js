@@ -10,7 +10,7 @@ const apiService = new ApiService()
 
 async function runProcess (hostname, dataDb, dataApi) {
     const database = dataDb.filter(obj => obj.hostname === hostname)
-    const api = dataApi.computers.filter(obj => obj.hostName === hostname)
+    const api = dataApi.computers.filter(obj => obj.lastIPUsed === hostname)
 
     if (api[0] !== undefined) {
         const apiFilter = api.map((data) => {
@@ -22,6 +22,7 @@ async function runProcess (hostname, dataDb, dataApi) {
             }
         })
         const stringMessage = apiFilter[0].agentmessage.toString()
+        console.log(apiFilter[0].hostname.toString())
 
         if (database[0].agentstatus !== apiFilter[0].agentstatus) {
             const statusupdate = new Date().toISOString()

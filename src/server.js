@@ -2,11 +2,11 @@
 require('dotenv').config()
 const DatabaseService = require('./Service/database/DatabaseService')
 const ApiService = require('./Service/api/ApiService')
-const ProducerService = require('./Service/producer/ProducerService')
+// const ProducerService = require('./Service/producer/ProducerService')
 
 const databaseService = new DatabaseService()
 const apiService = new ApiService()
-const producerService = ProducerService
+// const producerService = ProducerService
 
 async function runProcess (hostname, dataDb, dataApi) {
     const database = dataDb.filter(obj => obj.hostname === hostname)
@@ -15,7 +15,7 @@ async function runProcess (hostname, dataDb, dataApi) {
     if (api[0] !== undefined) {
         const apiFilter = api.map((data) => {
             return {
-                hostname: data.hostName,
+                hostname: data.lastIPUsed,
                 agentstatus: data.computerStatus.agentStatus,
                 agentmessage: data.computerStatus.agentStatusMessages,
                 lastcommunication: data.lastAgentCommunication
@@ -29,18 +29,18 @@ async function runProcess (hostname, dataDb, dataApi) {
 
             await databaseService.updateAgentStatusServer(apiFilter[0].agentstatus, stringMessage, apiFilter[0].hostname, statusupdate)
 
-            const message = {
-                hostname: database[0].hostname,
-                displayname: database[0].displayname,
-                agentstatus: apiFilter[0].agentstatus,
-                agentmessage: stringMessage,
-                statusupdate,
-                lastcommunication,
-                adminmail: database[0].email
-            }
+            // const message = {
+            //     hostname: database[0].hostname,
+            //     displayname: database[0].displayname,
+            //     agentstatus: apiFilter[0].agentstatus,
+            //     agentmessage: stringMessage,
+            //     statusupdate,
+            //     lastcommunication,
+            //     adminmail: database[0].email
+            // }
             console.log(lastcommunication)
             await databaseService.insertLog(database[0].server_id, apiFilter[0].agentstatus, stringMessage, statusupdate)
-            await producerService.sendMessage('sendEmail:notif', JSON.stringify(message))
+            // await producerService.sendMessage('sendEmail:notif', JSON.stringify(message))
         }
     } else {
         console.log(hostname + ' is not found')

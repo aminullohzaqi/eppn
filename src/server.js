@@ -22,7 +22,6 @@ async function runProcess (hostname, dataDb, dataApi) {
             }
         })
         const stringMessage = apiFilter[0].agentmessage.toString()
-        console.log(apiFilter[0].hostname.toString())
 
         if (database[0].agentstatus !== apiFilter[0].agentstatus) {
             const statusupdate = new Date().toISOString()
